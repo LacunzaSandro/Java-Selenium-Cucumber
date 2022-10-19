@@ -63,7 +63,7 @@ services:
       - BROWSER=REMOTE_CHROME
     volumes:
       - ./reports:/app/test-output
-      - ./.m2:/usr/share/maven/ref/repository
+      - ./.m2:/root/.m2
     networks:
       vpcbr:
         ipv4_address: 10.5.0.8
