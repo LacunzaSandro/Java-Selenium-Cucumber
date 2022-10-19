@@ -2,7 +2,6 @@ jenkins/jenkins_home/*
 reports/*
 test-output/*
 ff/
-.m2/
 .idea/
 *.txt
 target/*
