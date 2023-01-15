@@ -5,3 +5,5 @@ ff/
 .idea/
 *.txt
 target/*
+jenkins/*
+.m2/*
