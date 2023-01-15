@@ -1,5 +1,6 @@
 package driver;
 
+import logging.Logging;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -7,33 +8,60 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.net.MalformedURLException;
 import java.time.Duration;
 import java.util.function.Function;
 
-public class Waits {
+public class Waits implements Logging {
 
     private static <T> T waitForCondition(WebDriver driver, Integer timeOutSeconds, Function<WebDriver, T> condition) {
         return new WebDriverWait(driver, Duration.ofSeconds(timeOutSeconds))
-                .ignoring(WebDriverException.class)
                 .until(condition);
     }
 
-    public void waitForElementToBeVisible(WebDriver driver, final WebElement element, int seconds) {
-        waitForCondition(driver, seconds, d -> element.isDisplayed());
+    public void waitForElementToBeVisible(final WebElement element, int seconds) {
+        try {
+            WebDriver driver = Driver.getDriver();
+            waitForCondition(driver, seconds, d -> element.isDisplayed());
+        } catch (MalformedURLException e) {
+            getLogger().error("Waiting Error: " + e.getMessage());
+        }
+
     }
-    public void waitForJS(WebDriver driver, int seconds) {
-        waitForCondition(driver, seconds, d -> {
-            JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
-            return (Boolean)javascriptExecutor.executeScript("return document.readyState == 'complete' && (typeof jQuery == 'undefined' || jQuery.active == 0)");
-        });
+
+
+    public void waitForJS(int seconds) {
+        try {
+            WebDriver driver = Driver.getDriver();
+            waitForCondition(driver, seconds, d -> {
+                JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
+                return (Boolean) javascriptExecutor.executeScript("return document.readyState == 'complete' && (typeof jQuery == 'undefined' || jQuery.active == 0)");
+            });
+        } catch (MalformedURLException e) {
+            getLogger().error("Waiting Error: " + e.getMessage());
+        }
+
+
     }
-    public void waitForNewTabLoad(WebDriver driver, final int handles, int seconds) {
-        waitForCondition(driver,seconds,d -> !driver.getWindowHandles().equals(handles));
+
+    public void waitForNewTabLoad(final int handles, int seconds) {
+        try {
+            WebDriver driver = Driver.getDriver();
+            waitForCondition(driver, seconds, d -> !driver.getWindowHandles().equals(handles));
+        } catch (MalformedURLException e) {
+            getLogger().error("Waiting Error: " + e.getMessage());
+        }
+
     }
-    public void waitForAlert(WebDriver driver, int seconds) {
-        waitForCondition(driver,seconds, d -> {
-            return	ExpectedConditions.alertIsPresent().apply(driver) != null;
-        });
+
+    public void waitForAlert(int seconds) {
+        try {
+            WebDriver driver = Driver.getDriver();
+            waitForCondition(driver, seconds, d -> ExpectedConditions.alertIsPresent().apply(driver) != null);
+        } catch (MalformedURLException e) {
+            getLogger().error("Waiting Error: " + e.getMessage());
+        }
+
     }
 
 }
