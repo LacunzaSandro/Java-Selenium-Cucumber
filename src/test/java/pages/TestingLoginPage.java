@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import utils.Screenshots;
+import utils.TimeOut;
 
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
@@ -40,6 +41,7 @@ public class TestingLoginPage extends BasePage implements Logging {
     }
 
     public void clickBottomLogin() {
+        w.waitForElementToBeVisible(loginBtn, TimeOut.SECOND_10.getValue());
         loginBtn.click();
     }
 
